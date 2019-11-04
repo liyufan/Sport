@@ -1,6 +1,7 @@
-import wx
-import sport
 import pymysql
+import wx
+
+import sport
 
 
 # SCORE表记录成绩
@@ -15,52 +16,71 @@ class MainSport(sport.MyFrame):
 		self.m_statusBar.SetStatusText("就绪", 0)
 
 	def insert_update(self, event):
-		a_name = self.m_name1.GetValue()
-		a_no = self.m_no1.GetValue()
-		e = self.m_event1.GetValue()  # 项目名为汉字
-		score = int(self.m_score1.GetValue())
+		a_no = self.m_no.GetValue()  # 运动员编号
+		e = self.m_event.GetValue()  # 项目编号
+		score = int(self.m_score.GetValue())  # 成绩
 
+		'''
 		sql = "SELECT Eno FROM EVENT WHERE Ename LIKE %s"  # 防止SQL注入
 		self.cursor.execute(sql, e)
 		result = self.cursor.fetchall()
 		event_no = result[0]  # 返回项目名称对应的编号
+		'''
 
-		sql = "SELECT * FROM SCORE WHERE Ano = %s AND Eno = %s"
-		exist = self.cursor.execute(sql, (a_no, event_no))
-		if exist:
+		sql = "SELECT * FROM SCORE WHERE Ano = %s AND Eno = %s"  # 防止SQL注入
+		# self.cursor.execute(sql, (a_no, event_no))
+		self.cursor.execute(sql, (a_no, e))
+		result = self.cursor.fetchall()
+		if result is None:  # 返回空值，表示不存在旧数据，为插入数据
 			try:
 				sql = "INSERT INTO SCORE VALUE (%s, %s, %s)"
-				self.cursor.execute(sql, (a_no, event_no, score))
-				self.db.commit()
-				self.m_statusBar.SetStatusText("已成功更新1条数据", 1)
-			except Exception:
-				self.db.rollback()
-				self.m_statusBar.SetStatusText("操作失败！", 1)
-		else:
-			try:
-				sql = "UPDATE SCORE SET Score = %s WHERE Ano = %s AND Eno = %s"
-				self.cursor.execute(sql, (score, a_no, event_no))
+				self.cursor.execute(sql, (a_no, e, score))
 				self.db.commit()
 				self.m_statusBar.SetStatusText("已成功插入1条数据", 1)
 			except Exception:
 				self.db.rollback()
 				self.m_statusBar.SetStatusText("操作失败！", 1)
+		else:  # 返回非空值，表示存在旧数据，为更新数据
+			try:
+				sql = "UPDATE SCORE SET Score = %s WHERE Ano = %s AND Eno = %s"
+				self.cursor.execute(sql, (score, a_no, e))
+				self.db.commit()
+				self.m_statusBar.SetStatusText("已成功更新1条数据", 1)
+			except Exception:
+				self.db.rollback()
+				self.m_statusBar.SetStatusText("操作失败！", 1)
 
+	# TODO:完成删除
 	def delete(self, event):
 		pass
 
 	def query(self, event):
-		i = self.m_choice.GetSelection()  # 0代表学生姓名，1代表项目名称
-		condition = self.m_input.GetValue()
+		i = self.m_choice.GetSelection()  # 0运动员姓名 1运动员编号 2项目名 3项目编号
+		condition = self.m_input.GetValue()  # 查询条件具体值
+		sql = ""
 		if i == 0:
-			sql = "SELECT Ano FROM ATHLETE WHERE Aname LIKE %S"
-			self.cursor.execute(sql, condition)
-			result = self.cursor.fetchall()
-			a_no = result[0]
+			sql = "SELECT ATHLETE.Ano, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano " \
+			      "= ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND Aname LIKE %s "
+			self.m_output.AppendText("运动员编号\t项目名\t项目编号\t成绩\n")  # 按姓名查询时，输出不显示姓名
 
-			sql = "SELECT * FROM SCORE WHERE Ano = %s"
-			self.cursor.execute(sql, a_no)
-			result = self.cursor.fetchall()  # 查询结果不多于4条
+		elif i == 1:
+			sql = "SELECT ATHLETE.Aname, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE " \
+			      "SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND Ano = %s "
+			self.m_output.AppendText("运动员姓名\t项目名\t项目编号\t成绩\n")
+		elif i == 2:
+			sql = "SELECT ATHLETE.Ano, ATHLETE.Aname, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE " \
+			      "SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND Ename LIKE %s "
+			self.m_output.AppendText("运动员编号\t运动员姓名\t项目编号\t成绩\n")
+		elif i == 3:
+			sql = "SELECT ATHLETE.Ano, ATHLETE.Aname, EVENT.Ename, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE " \
+			      "SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND Eno = %s "
+			self.m_output.AppendText("运动员编号\t运动员姓名\t项目名\t成绩\n")
+		self.cursor.execute(sql, condition)
+		result = self.cursor.fetchall()
+		for var in result:
+			for item in var:
+				self.m_output.AppendText(str(item) + '\t\t')
+			self.m_output.AppendText('\n')
 
 	def exit(self, event):
 		self.exit()
