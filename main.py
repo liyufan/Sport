@@ -19,6 +19,7 @@ class MainSport(sport.MyFrame):
 		a_no = self.m_no.GetValue()  # 运动员编号
 		e = self.m_event.GetValue()  # 项目编号
 		score = int(self.m_score.GetValue())  # 成绩
+		self.m_output.Clear()
 
 		'''
 		sql = "SELECT Eno FROM EVENT WHERE Ename LIKE %s"  # 防止SQL注入
@@ -50,13 +51,31 @@ class MainSport(sport.MyFrame):
 				self.db.rollback()
 				self.m_statusBar.SetStatusText("操作失败！", 1)
 
-	# TODO:完成删除
 	def delete(self, event):
-		pass
+		i = self.m_choice.GetSelection()  # 0运动员姓名 1运动员编号 2项目名 3项目编号
+		condition = self.m_input.GetValue()  # 删除条件具体值
+		self.m_output.Clear()
+		sql = ""
+		if i == 0:
+			sql = "DELETE FROM SCORE WHERE Ano IN (SELECT Ano FROM ATHLETE WHERE Aname LIKE %s)"
+		elif i == 1:
+			sql = "DELETE FROM SCORE WHERE Ano = %s"
+		elif i == 2:
+			sql = "DELETE FROM SCORE WHERE Eno IN (SELECT Eno FROM EVENT WHERE Ename LIKE %s)"
+		elif i == 3:
+			sql = "DELETE FROM SCORE WHERE Eno = %s"
+		try:
+			rol = self.cursor.execute(sql, condition)
+			self.db.commit()
+			self.m_statusBar.SetStatusText("已成功删除" + rol + "条数据", 1)
+		except Exception:
+			self.db.rollback()
+			self.m_statusBar.SetStatusText("删除失败！", 1)
 
 	def query(self, event):
 		i = self.m_choice.GetSelection()  # 0运动员姓名 1运动员编号 2项目名 3项目编号
 		condition = self.m_input.GetValue()  # 查询条件具体值
+		self.m_output.Clear()
 		sql = ""
 		if i == 0:
 			sql = "SELECT ATHLETE.Ano, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano " \
@@ -83,6 +102,8 @@ class MainSport(sport.MyFrame):
 			self.m_output.AppendText('\n')
 
 	def exit(self, event):
+		self.cursor.close()
+		self.db.close()
 		self.exit()
 
 	def info(self, event):

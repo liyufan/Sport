@@ -19,40 +19,17 @@ class MyFrame(wx.Frame):
 
 	def __init__(self, parent):
 		wx.Frame.__init__(self, parent, id=wx.ID_ANY, title=u"运动会数据库管理系统", pos=wx.DefaultPosition,
-		                  size=wx.Size(826, 442), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
+		                  size=wx.Size(826, 517), style=wx.DEFAULT_FRAME_STYLE | wx.TAB_TRAVERSAL)
 
 		self.SetSizeHints(wx.DefaultSize, wx.DefaultSize)
+		self.SetForegroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_BACKGROUND))
+		self.SetBackgroundColour(wx.SystemSettings.GetColour(wx.SYS_COLOUR_INACTIVECAPTION))
 
 		bSizer = wx.BoxSizer(wx.VERTICAL)
-
-		sbSizer1 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"请选择功能"), wx.VERTICAL)
-
-		bSizer9 = wx.BoxSizer(wx.HORIZONTAL)
-
-		self.m_radioBtn1 = wx.RadioButton(sbSizer1.GetStaticBox(), wx.ID_ANY, u"查询", wx.DefaultPosition, wx.DefaultSize,
-		                                  0)
-		bSizer9.Add(self.m_radioBtn1, 0, wx.ALL, 5)
-
-		self.m_radioBtn2 = wx.RadioButton(sbSizer1.GetStaticBox(), wx.ID_ANY, u"插入", wx.DefaultPosition, wx.DefaultSize,
-		                                  0)
-		bSizer9.Add(self.m_radioBtn2, 0, wx.ALL, 5)
-
-		sbSizer1.Add(bSizer9, 0, wx.ALIGN_CENTER, 5)
-
-		bSizer.Add(sbSizer1, 0, wx.ALIGN_CENTER, 5)
 
 		sbSizer2 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"操作"), wx.VERTICAL)
 
 		bSizer5 = wx.BoxSizer(wx.HORIZONTAL)
-
-		self.m_staticText8 = wx.StaticText(sbSizer2.GetStaticBox(), wx.ID_ANY, u"MyLabel", wx.DefaultPosition,
-		                                   wx.DefaultSize, 0)
-		self.m_staticText8.Wrap(-1)
-
-		bSizer5.Add(self.m_staticText8, 0, wx.ALIGN_CENTER | wx.ALIGN_LEFT | wx.ALL, 5)
-
-		self.m_button1 = wx.Button(sbSizer2.GetStaticBox(), wx.ID_ANY, u"插入/更新", wx.DefaultPosition, wx.DefaultSize, 0)
-		bSizer5.Add(self.m_button1, 0, wx.ALL, 5)
 
 		self.m_staticText11 = wx.StaticText(sbSizer2.GetStaticBox(), wx.ID_ANY, u"查询/删除条件：", wx.DefaultPosition,
 		                                    wx.DefaultSize, 0)
@@ -60,7 +37,7 @@ class MyFrame(wx.Frame):
 
 		bSizer5.Add(self.m_staticText11, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-		m_choiceChoices = [u"学生姓名", u"项目名称"]
+		m_choiceChoices = [u"运动员姓名", u"运动员编号", u"项目名称", u"项目编号"]
 		self.m_choice = wx.Choice(sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
 		                          m_choiceChoices, wx.CB_SORT)
 		self.m_choice.SetSelection(0)
@@ -69,12 +46,6 @@ class MyFrame(wx.Frame):
 		self.m_input = wx.TextCtrl(sbSizer2.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
 		                           wx.DefaultSize, 0)
 		bSizer5.Add(self.m_input, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-		self.m_staticText9 = wx.StaticText(sbSizer2.GetStaticBox(), wx.ID_ANY, u"MyLabel", wx.DefaultPosition,
-		                                   wx.DefaultSize, 0)
-		self.m_staticText9.Wrap(-1)
-
-		bSizer5.Add(self.m_staticText9, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
 		self.m_button2 = wx.Button(sbSizer2.GetStaticBox(), wx.ID_ANY, u"删除", wx.DefaultPosition, wx.DefaultSize, 0)
 		bSizer5.Add(self.m_button2, 0, wx.ALL, 5)
@@ -86,25 +57,19 @@ class MyFrame(wx.Frame):
 
 		bSizer.Add(sbSizer2, 0, wx.ALIGN_CENTER, 5)
 
-		sbSizer3 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"输入与结果"), wx.HORIZONTAL)
+		sbSizer3 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"输入"), wx.HORIZONTAL)
 
 		fgSizer1 = wx.FlexGridSizer(0, 4, 0, 0)
 		fgSizer1.SetFlexibleDirection(wx.BOTH)
 		fgSizer1.SetNonFlexibleGrowMode(wx.FLEX_GROWMODE_SPECIFIED)
 
-		self.m_staticText12 = wx.StaticText(sbSizer3.GetStaticBox(), wx.ID_ANY, u"姓名", wx.DefaultPosition,
-		                                    wx.DefaultSize, 0)
-		self.m_staticText12.Wrap(-1)
-
-		fgSizer1.Add(self.m_staticText12, 0, wx.ALIGN_CENTER | wx.ALL, 5)
-
-		self.m_staticText13 = wx.StaticText(sbSizer3.GetStaticBox(), wx.ID_ANY, u"编号", wx.DefaultPosition,
+		self.m_staticText13 = wx.StaticText(sbSizer3.GetStaticBox(), wx.ID_ANY, u"运动员编号", wx.DefaultPosition,
 		                                    wx.DefaultSize, 0)
 		self.m_staticText13.Wrap(-1)
 
 		fgSizer1.Add(self.m_staticText13, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-		self.m_staticText15 = wx.StaticText(sbSizer3.GetStaticBox(), wx.ID_ANY, u"项目", wx.DefaultPosition,
+		self.m_staticText15 = wx.StaticText(sbSizer3.GetStaticBox(), wx.ID_ANY, u"项目编号", wx.DefaultPosition,
 		                                    wx.DefaultSize, 0)
 		self.m_staticText15.Wrap(-1)
 
@@ -116,73 +81,58 @@ class MyFrame(wx.Frame):
 
 		fgSizer1.Add(self.m_staticText16, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-		self.m_name1 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+		fgSizer1.Add((0, 0), 1, wx.EXPAND, 5)
+
+		self.m_no = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
+		                        0)
+		fgSizer1.Add(self.m_no, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+		self.m_event = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
 		                           wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_name1, 0, wx.ALL, 5)
+		fgSizer1.Add(self.m_event, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-		self.m_no1 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
-		                         0)
-		fgSizer1.Add(self.m_no1, 0, wx.ALL, 5)
-
-		self.m_event1 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                            wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_event1, 0, wx.ALL, 5)
-
-		self.m_score1 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                            wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_score1, 0, wx.ALL, 5)
-
-		self.m_name2 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+		self.m_score = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
 		                           wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_name2, 0, wx.ALL, 5)
+		fgSizer1.Add(self.m_score, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-		self.m_no2 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
-		                         0)
-		fgSizer1.Add(self.m_no2, 0, wx.ALL, 5)
-
-		self.m_event2 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                            wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_event2, 0, wx.ALL, 5)
-
-		self.m_score2 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                            wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_score2, 0, wx.ALL, 5)
-
-		self.m_name3 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                           wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_name3, 0, wx.ALL, 5)
-
-		self.m_no3 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
-		                         0)
-		fgSizer1.Add(self.m_no3, 0, wx.ALL, 5)
-
-		self.m_event3 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                            wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_event3, 0, wx.ALL, 5)
-
-		self.m_score3 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                            wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_score3, 0, wx.ALL, 5)
-
-		self.m_name4 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                           wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_name4, 0, wx.ALL, 5)
-
-		self.m_no4 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition, wx.DefaultSize,
-		                         0)
-		fgSizer1.Add(self.m_no4, 0, wx.ALL, 5)
-
-		self.m_event4 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                            wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_event4, 0, wx.ALL, 5)
-
-		self.m_score4 = wx.TextCtrl(sbSizer3.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                            wx.DefaultSize, 0)
-		fgSizer1.Add(self.m_score4, 0, wx.ALL, 5)
+		self.m_button6 = wx.Button(sbSizer3.GetStaticBox(), wx.ID_ANY, u"插入/更新", wx.DefaultPosition, wx.DefaultSize, 0)
+		fgSizer1.Add(self.m_button6, 0, wx.ALL, 5)
 
 		sbSizer3.Add(fgSizer1, 1, 0, 5)
 
 		bSizer.Add(sbSizer3, 0, wx.ALIGN_CENTER_HORIZONTAL, 5)
+
+		bSizer7 = wx.BoxSizer(wx.HORIZONTAL)
+
+		sbSizer4 = wx.StaticBoxSizer(wx.StaticBox(self, wx.ID_ANY, u"查询结果"), wx.HORIZONTAL)
+
+		bSizer51 = wx.BoxSizer(wx.HORIZONTAL)
+
+		self.m_output = wx.TextCtrl(sbSizer4.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
+		                            wx.Size(500, 250), 0)
+		bSizer51.Add(self.m_output, 0, wx.ALL, 5)
+
+		sbSizer4.Add(bSizer51, 1, 0, 5)
+
+		bSizer7.Add(sbSizer4, 0, 0, 0)
+
+		bSizer8 = wx.BoxSizer(wx.VERTICAL)
+
+		bSizer8.Add((0, 4), 0, wx.EXPAND, 5)
+
+		self.m_staticText91 = wx.StaticText(self, wx.ID_ANY, u"Powered by Group 6", wx.DefaultPosition, wx.DefaultSize,
+		                                    0)
+		self.m_staticText91.Wrap(-1)
+
+		bSizer8.Add(self.m_staticText91, 0, wx.ALIGN_CENTER_HORIZONTAL, 5)
+
+		self.m_bitmap4 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap(u"../../../Pictures/1.jpg", wx.BITMAP_TYPE_ANY),
+		                                 wx.DefaultPosition, wx.Size(250, 240), 0)
+		bSizer8.Add(self.m_bitmap4, 0, wx.ALIGN_CENTER | wx.ALL, 5)
+
+		bSizer7.Add(bSizer8, 1, wx.EXPAND, 5)
+
+		bSizer.Add(bSizer7, 0, wx.EXPAND, 5)
 
 		self.SetSizer(bSizer)
 		self.Layout()
@@ -205,7 +155,6 @@ class MyFrame(wx.Frame):
 		self.Centre(wx.BOTH)
 
 		# Connect Events
-		self.m_button1.Bind(wx.EVT_BUTTON, self.insert_update)
 		self.m_button2.Bind(wx.EVT_BUTTON, self.delete)
 		self.m_button3.Bind(wx.EVT_BUTTON, self.query)
 		self.Bind(wx.EVT_MENU, self.exit, id=self.m_menuItem_quit.GetId())
@@ -214,10 +163,7 @@ class MyFrame(wx.Frame):
 	def __del__(self):
 		pass
 
-	# Virtual event handlers, override them in your derived class
-	def insert_update(self, event):
-		event.Skip()
-
+	# Virtual event handlers, overide them in your derived class
 	def delete(self, event):
 		event.Skip()
 
