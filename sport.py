@@ -10,7 +10,6 @@
 import wx
 import wx.xrc
 
-
 ###########################################################################
 ## Class MyFrame
 ###########################################################################
@@ -37,7 +36,7 @@ class MyFrame(wx.Frame):
 
 		bSizer5.Add(self.m_staticText11, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
-		m_choiceChoices = [u"运动员姓名", u"运动员编号", u"项目名称", u"项目编号"]
+		m_choiceChoices = [u"项目编号", u"项目名称", u"运动员编号", u"运动员姓名"]
 		self.m_choice = wx.Choice(sbSizer2.GetStaticBox(), wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize,
 		                          m_choiceChoices, wx.CB_SORT)
 		self.m_choice.SetSelection(0)
@@ -109,7 +108,7 @@ class MyFrame(wx.Frame):
 		bSizer51 = wx.BoxSizer(wx.HORIZONTAL)
 
 		self.m_output = wx.TextCtrl(sbSizer4.GetStaticBox(), wx.ID_ANY, wx.EmptyString, wx.DefaultPosition,
-		                            wx.Size(500, 250), 0)
+		                            wx.Size(500, 250), wx.TE_MULTILINE)
 		bSizer51.Add(self.m_output, 0, wx.ALL, 5)
 
 		sbSizer4.Add(bSizer51, 1, 0, 5)
@@ -120,14 +119,14 @@ class MyFrame(wx.Frame):
 
 		bSizer8.Add((0, 4), 0, wx.EXPAND, 5)
 
-		self.m_staticText91 = wx.StaticText(self, wx.ID_ANY, u"Powered by Group 6", wx.DefaultPosition, wx.DefaultSize,
+		self.m_staticText91 = wx.StaticText(self, wx.ID_ANY, u"Powerd by Group 6", wx.DefaultPosition, wx.DefaultSize,
 		                                    0)
 		self.m_staticText91.Wrap(-1)
 
 		bSizer8.Add(self.m_staticText91, 0, wx.ALIGN_CENTER_HORIZONTAL, 5)
 
-		self.m_bitmap4 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap(u"../../../Pictures/1.jpg", wx.BITMAP_TYPE_ANY),
-		                                 wx.DefaultPosition, wx.Size(250, 240), 0)
+		self.m_bitmap4 = wx.StaticBitmap(self, wx.ID_ANY, wx.Bitmap(u"1.jpg", wx.BITMAP_TYPE_ANY), wx.DefaultPosition,
+		                                 wx.Size(250, 240), 0)
 		bSizer8.Add(self.m_bitmap4, 0, wx.ALIGN_CENTER | wx.ALL, 5)
 
 		bSizer7.Add(bSizer8, 1, wx.EXPAND, 5)
@@ -162,6 +161,7 @@ class MyFrame(wx.Frame):
 
 	def __del__(self):
 		pass
+
 
 	# Virtual event handlers, overide them in your derived class
 	def delete(self, event):

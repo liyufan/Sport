@@ -1,5 +1,6 @@
 import pymysql
 import wx
+from pymysql.err import *
 
 import sport
 
@@ -32,7 +33,7 @@ class MainSport(sport.MyFrame):
 		# self.cursor.execute(sql, (a_no, event_no))
 		self.cursor.execute(sql, (a_no, e))
 		result = self.cursor.fetchall()
-		if result is None:  # 返回空值，表示不存在旧数据，为插入数据
+		if result == ():  # 返回空值，表示不存在旧数据，为插入数据
 			try:
 				sql = "INSERT INTO SCORE VALUE (%s, %s, %s)"
 				self.cursor.execute(sql, (a_no, e, score))
@@ -56,44 +57,39 @@ class MainSport(sport.MyFrame):
 		condition = self.m_input.GetValue()  # 删除条件具体值
 		self.m_output.Clear()
 		sql = ""
-		if i == 0:
+		if i == 3:
 			sql = "DELETE FROM SCORE WHERE Ano IN (SELECT Ano FROM ATHLETE WHERE Aname LIKE %s)"
-		elif i == 1:
-			sql = "DELETE FROM SCORE WHERE Ano = %s"
 		elif i == 2:
+			sql = "DELETE FROM SCORE WHERE Ano = %s"
+		elif i == 1:
 			sql = "DELETE FROM SCORE WHERE Eno IN (SELECT Eno FROM EVENT WHERE Ename LIKE %s)"
-		elif i == 3:
+		elif i == 0:
 			sql = "DELETE FROM SCORE WHERE Eno = %s"
 		try:
 			rol = self.cursor.execute(sql, condition)
 			self.db.commit()
-			self.m_statusBar.SetStatusText("已成功删除" + rol + "条数据", 1)
+			self.m_statusBar.SetStatusText("已成功删除" + str(rol) + "条数据", 1)
 		except DatabaseError:
 			self.db.rollback()
 			self.m_statusBar.SetStatusText("删除失败！", 1)
 
 	def query(self, event):
-		i = self.m_choice.GetSelection()  # 0运动员姓名 1运动员编号 2项目名 3项目编号
+		i = self.m_choice.GetSelection()  # 3运动员姓名 2运动员编号 1项目名 0项目编号
 		condition = self.m_input.GetValue()  # 查询条件具体值
 		self.m_output.Clear()
 		sql = ""
-		if i == 0:
-			sql = "SELECT ATHLETE.Ano, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano " \
-			      "= ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND Aname LIKE %s "
-			self.m_output.AppendText("运动员编号\t项目名\t项目编号\t成绩\n")  # 按姓名查询时，输出不显示姓名
-
-		elif i == 1:
-			sql = "SELECT ATHLETE.Aname, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE " \
-			      "SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND Ano = %s "
-			self.m_output.AppendText("运动员姓名\t项目名\t项目编号\t成绩\n")
+		if i == 3:
+			sql = "SELECT ATHLETE.Ano, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND ATHLETE.Aname LIKE %s"
+			self.m_output.AppendText("运动员编号\t项目名\t项目编号\t\t成绩\n")  # 按姓名查询时，输出不显示姓名
 		elif i == 2:
-			sql = "SELECT ATHLETE.Ano, ATHLETE.Aname, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE " \
-			      "SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND Ename LIKE %s "
-			self.m_output.AppendText("运动员编号\t运动员姓名\t项目编号\t成绩\n")
-		elif i == 3:
-			sql = "SELECT ATHLETE.Ano, ATHLETE.Aname, EVENT.Ename, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE " \
-			      "SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND Eno = %s "
-			self.m_output.AppendText("运动员编号\t运动员姓名\t项目名\t成绩\n")
+			sql = "SELECT ATHLETE.Aname, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND AHTLETE.Ano = %s"
+			self.m_output.AppendText("运动员姓名\t项目名\t项目编号\t\t成绩\n")
+		elif i == 1:
+			sql = "SELECT ATHLETE.Ano, ATHLETE.Aname, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND EVENT.Ename LIKE %s"
+			self.m_output.AppendText("运动员编号\t运动员姓名\t项目编号\t\t成绩\n")
+		elif i == 0:
+			sql = "SELECT ATHLETE.Ano, ATHLETE.Aname, EVENT.Ename, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND EVENT.Eno = %s"
+			self.m_output.AppendText("运动员编号\t运动员姓名\t项目名\t\t成绩\n")
 		self.cursor.execute(sql, condition)
 		result = self.cursor.fetchall()
 		for var in result:
