@@ -22,15 +22,7 @@ class MainSport(sport.MyFrame):
 		score = int(self.m_score.GetValue())  # 成绩
 		self.m_output.Clear()
 
-		'''
-		sql = "SELECT Eno FROM EVENT WHERE Ename LIKE %s"  # 防止SQL注入
-		self.cursor.execute(sql, e)
-		result = self.cursor.fetchall()
-		event_no = result[0]  # 返回项目名称对应的编号
-		'''
-
 		sql = "SELECT * FROM SCORE WHERE Ano = %s AND Eno = %s"  # 防止SQL注入
-		# self.cursor.execute(sql, (a_no, event_no))
 		self.cursor.execute(sql, (a_no, e))
 		result = self.cursor.fetchall()
 		if result == ():  # 返回空值，表示不存在旧数据，为插入数据
@@ -79,16 +71,20 @@ class MainSport(sport.MyFrame):
 		self.m_output.Clear()
 		sql = ""
 		if i == 3:
-			sql = "SELECT ATHLETE.Ano, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND ATHLETE.Aname LIKE %s"
+			sql = "SELECT ATHLETE.Ano, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano \
+				  = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND ATHLETE.Aname LIKE %s ORDER BY SCORE "
 			self.m_output.AppendText("运动员编号\t项目名\t项目编号\t\t成绩\n")  # 按姓名查询时，输出不显示姓名
 		elif i == 2:
-			sql = "SELECT ATHLETE.Aname, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND AHTLETE.Ano = %s"
+			sql = "SELECT ATHLETE.Aname, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE \
+				  SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND AHTLETE.Ano = %s ORDER BY SCORE"
 			self.m_output.AppendText("运动员姓名\t项目名\t项目编号\t\t成绩\n")
 		elif i == 1:
-			sql = "SELECT ATHLETE.Ano, ATHLETE.Aname, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND EVENT.Ename LIKE %s"
+			sql = "SELECT ATHLETE.Ano, ATHLETE.Aname, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE \
+				  SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND EVENT.Ename LIKE %s ORDER BY SCORE"
 			self.m_output.AppendText("运动员编号\t运动员姓名\t项目编号\t\t成绩\n")
 		elif i == 0:
-			sql = "SELECT ATHLETE.Ano, ATHLETE.Aname, EVENT.Ename, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND EVENT.Eno = %s"
+			sql = "SELECT ATHLETE.Ano, ATHLETE.Aname, EVENT.Ename, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE \
+				  SCORE.Ano = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND EVENT.Eno = %s ORDER BY SCORE"
 			self.m_output.AppendText("运动员编号\t运动员姓名\t项目名\t\t成绩\n")
 		self.cursor.execute(sql, condition)
 		result = self.cursor.fetchall()

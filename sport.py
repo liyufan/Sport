@@ -10,6 +10,7 @@
 import wx
 import wx.xrc
 
+
 ###########################################################################
 ## Class MyFrame
 ###########################################################################
@@ -162,8 +163,7 @@ class MyFrame(wx.Frame):
 	def __del__(self):
 		pass
 
-
-	# Virtual event handlers, overide them in your derived class
+	# Virtual event handlers, override them in your derived class
 	def delete(self, event):
 		event.Skip()
 
