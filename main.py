@@ -72,7 +72,7 @@ class MainSport(sport.MyFrame):
 		sql = ""
 		if i == 3:
 			sql = "SELECT ATHLETE.Ano, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE SCORE.Ano \
-				  = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND ATHLETE.Aname LIKE %s ORDER BY SCORE "
+				  = ATHLETE.Ano AND SCORE.Eno = EVENT.Eno AND ATHLETE.Aname LIKE %s ORDER BY SCORE"
 			self.m_output.AppendText("运动员编号\t项目名\t项目编号\t\t成绩\n")  # 按姓名查询时，输出不显示姓名
 		elif i == 2:
 			sql = "SELECT ATHLETE.Aname, EVENT.Ename, EVENT.Eno, SCORE.Score FROM ATHLETE, EVENT, SCORE WHERE \

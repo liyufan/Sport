@@ -157,6 +157,7 @@ class MyFrame(wx.Frame):
 		# Connect Events
 		self.m_button2.Bind(wx.EVT_BUTTON, self.delete)
 		self.m_button3.Bind(wx.EVT_BUTTON, self.query)
+		self.m_button6.Bind(wx.EVT_BUTTON, self.insert_update)
 		self.Bind(wx.EVT_MENU, self.exit, id=self.m_menuItem_quit.GetId())
 		self.Bind(wx.EVT_MENU, self.info, id=self.m_menuItem_ver.GetId())
 
@@ -168,6 +169,9 @@ class MyFrame(wx.Frame):
 		event.Skip()
 
 	def query(self, event):
+		event.Skip()
+
+	def insert_update(self, event):
 		event.Skip()
 
 	def exit(self, event):
